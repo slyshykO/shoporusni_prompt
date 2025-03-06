@@ -1,10 +1,10 @@
-use std::fs::File;
-use std::io::{ErrorKind, Read, Write};
-use std::path::{PathBuf};
 use anyhow::{anyhow, Result};
 use humantime::Duration;
-use std::time::SystemTime;
 use log::{debug, error, info, warn};
+use std::fs::File;
+use std::io::{ErrorKind, Read, Write};
+use std::path::PathBuf;
+use std::time::SystemTime;
 
 // Create a new instance of Cache and read the cache from the file
 pub fn read(cache_dir: PathBuf, ttl: humantime::Duration) -> Result<Cache> {
@@ -63,7 +63,8 @@ impl Cache {
                 debug!("Cache file read: {:?}", &s);
 
                 info!("Checking cache file age...");
-                let mills_since_modified = Duration::from(SystemTime::now().duration_since(f.metadata()?.modified()?)?);
+                let mills_since_modified =
+                    Duration::from(SystemTime::now().duration_since(f.metadata()?.modified()?)?);
                 info!("Cache file age: {}", mills_since_modified);
                 self.data = if mills_since_modified.as_micros() > self.ttl.as_micros() {
                     info!("Cache file is outdated");
@@ -89,7 +90,6 @@ impl Cache {
     }
 }
 
-
 #[derive(Debug, PartialEq, Clone)]
 pub enum Data {
     Ready(String),
@@ -109,51 +109,54 @@ mod tests {
     // Test Cache.get_cache() fail
     #[test]
     fn get_cache_fail() {
-        let mut cache = Cache::new(PathBuf::from("/nonexist/"), Duration::from_str("1s").unwrap());
+        let mut cache = Cache::new(
+            PathBuf::from("/nonexist/"),
+            Duration::from_str("1s").unwrap(),
+        );
         assert!(cache.read().is_err());
     }
 
     // Test Cache.get_cache() not found
     #[test]
     fn get_cache_none() {
-        let dir = tempfile::tempdir().expect("Can't create a temp dir").into_path();
+        let dir = tempfile::tempdir()
+            .expect("Can't create a temp dir")
+            .into_path();
         let mut cache = Cache::new(dir.clone(), Duration::from_str("1s").unwrap());
         assert!(matches!(cache.read(), Ok(_)));
         assert!(matches!(cache.data, Data::None));
         // Check file is created
-        assert!(
-            !File::open(format!("{}/cache.json", dir.to_str().unwrap())).is_err()
-        )
+        assert!(!File::open(format!("{}/cache.json", dir.to_str().unwrap())).is_err())
     }
 
     // Test Cache.get_cache() outdated
     #[test]
     fn get_cache_outdated() {
-        let dir = tempfile::tempdir().expect("Can't create a temp dir").into_path();
+        let dir = tempfile::tempdir()
+            .expect("Can't create a temp dir")
+            .into_path();
         let mut cache = Cache::new(dir.clone(), Duration::from_str("0 ns").unwrap());
         let mut file = File::create(dir.clone().join("cache.json")).unwrap();
         write!(file, "data").expect("Fila should contain info");
         assert!(matches!(cache.read(), Ok(_)));
         assert_eq!(cache.data, Data::Outdated("data".to_string()));
         // Check file is created
-        assert!(
-            !File::open(format!("{}/cache.json", dir.to_str().unwrap())).is_err()
-        )
+        assert!(!File::open(format!("{}/cache.json", dir.to_str().unwrap())).is_err())
     }
 
     // Test Cache.get_cache() ready
     #[test]
     fn get_cache_ready() {
-        let dir = tempfile::tempdir().expect("Can't create a temp dir").into_path();
+        let dir = tempfile::tempdir()
+            .expect("Can't create a temp dir")
+            .into_path();
         let mut cache = Cache::new(dir.clone(), Duration::from_str("1 s").unwrap());
         let mut file = File::create(dir.clone().join("cache.json")).unwrap();
         write!(file, "data").expect("Fila should contain info");
         assert!(matches!(cache.read(), Ok(_)));
         assert_eq!(cache.data, Data::Ready("data".to_string()));
         // Check file is created
-        assert!(
-            !File::open(format!("{}/cache.json", dir.to_str().unwrap())).is_err()
-        )
+        assert!(!File::open(format!("{}/cache.json", dir.to_str().unwrap())).is_err())
     }
 
     // Test Cache.write() fail
@@ -167,11 +170,11 @@ mod tests {
     // Test Cache.write() success
     #[test]
     fn write_success() {
-        let dir = tempfile::tempdir().expect("Can't create a temp dir").into_path();
+        let dir = tempfile::tempdir()
+            .expect("Can't create a temp dir")
+            .into_path();
         let mut cache = Cache::new(dir.clone(), Duration::from_str("1s").unwrap());
         assert!(matches!(cache.write("data"), Ok(_)));
-        assert!(
-            !File::open(format!("{}/cache.json", dir.to_str().unwrap())).is_err()
-        )
+        assert!(!File::open(format!("{}/cache.json", dir.to_str().unwrap())).is_err())
     }
 }

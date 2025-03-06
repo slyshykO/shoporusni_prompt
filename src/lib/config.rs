@@ -1,7 +1,7 @@
+use anyhow::{Context, Result};
+use log::debug;
 use std::fs::DirBuilder;
 use std::path::PathBuf;
-use anyhow::{Result, Context};
-use log::debug;
 
 pub fn config_dir() -> Result<PathBuf> {
     let cfg_dir = dirs::config_dir()
