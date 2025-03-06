@@ -5,7 +5,7 @@ use std::path::PathBuf;
 
 pub fn config_dir() -> Result<PathBuf> {
     let cfg_dir = dirs::config_dir()
-        .unwrap_or(PathBuf::new())
+        .unwrap_or_default()
         .join("shoporusni");
     debug!("Config dir: {:?}", cfg_dir);
     // Create a new config dir if it doesn't exist

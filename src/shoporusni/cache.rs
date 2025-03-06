@@ -1,6 +1,6 @@
 use anyhow::{anyhow, Result};
 use humantime::Duration;
-use log::{debug, error, info, warn};
+use log::{debug, info, warn};
 use std::fs::File;
 use std::io::{ErrorKind, Read, Write};
 use std::path::PathBuf;

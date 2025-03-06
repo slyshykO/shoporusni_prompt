@@ -1,10 +1,9 @@
-mod lib;
+mod shoporusni;
 
-use crate::lib::{cache, config};
+use crate::shoporusni::{cache, config};
 use anyhow::Result;
 use clap::Parser;
 use colored::control as color_control;
-use humantime;
 use log::info;
 use simplelog::ColorChoice;
 
@@ -45,7 +44,8 @@ fn main() -> Result<()> {
     info!("Reading cache");
     let cache = cache::read(cfg_dir, c.refresh)?;
     info!("Getting data from API or cache");
-    let data = lib::get_data(c.url, cache)?;
+    let data = shoporusni::get_data(c.url, cache)?;
     info!("Printing result");
-    Ok(lib::print_result(&data))
+    shoporusni::print_result(&data);
+    Ok(())
 }
