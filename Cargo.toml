@@ -9,17 +9,17 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0"
-clap = { version = "3.2.6", features = ["derive"] }
-atty = "0.2.14"
-log = "0.4.17"
-simplelog = "0.12.0"
-clap-verbosity-flag = "1.0.1"
+clap = { version = "4.5", features = ["derive"] }
+atty = "0.2"
+log = "0.4"
+simplelog = "0.12"
+clap-verbosity-flag = "3.0"
 url = "2.2.2"
-reqwest = { version = "0.11.11", features = ["blocking"] }
+reqwest = { version = "0.12", features = ["blocking"] }
 tempfile = "3.3.0"
 humantime = "2.1.0"
-serde_json = "1.0.81"
-serde_derive = "1.0.137"
-serde = {version = "1.0.137", features = ["derive"]}
-dirs = "4.0.0"
-colored = "2.0.0"
+serde_json = "1.0"
+serde_derive = "1.0"
+serde = {version = "1.0", features = ["derive"]}
+dirs = "6.0"
+colored = "3.0"
