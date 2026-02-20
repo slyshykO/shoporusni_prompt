@@ -15,7 +15,7 @@ log = "0.4"
 simplelog = "0.12"
 clap-verbosity-flag = "3.0"
 url = "2.2.2"
-reqwest = { version = "0.12", features = ["blocking"] }
+reqwest = { version = "0.13", features = ["blocking"] }
 tempfile = "3.3.0"
 humantime = "2.1.0"
 serde_json = "1.0"
